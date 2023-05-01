@@ -1,4 +1,5 @@
 // import './index.css'
+import NxtWatchContext from '../../context/NxtWatchContext'
 
 const NotFound = () => (
   <div className="not-found-container">

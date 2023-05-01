@@ -15,23 +15,30 @@ import './App.css'
 
 // Replace your code here
 class App extends Component {
-  state = {isDarkMode: true}
+  //   state = {isDarkMode: true}
+  state = {isDarkMode: false}
+
+  toggleTheme = () => {
+    this.setState(preState => ({isDarkMode: !preState.isDarkMode}))
+  }
 
   render() {
     const {isDarkMode} = this.state
     return (
-      <NxtWatchContext.Provider value={{isDarkMode}}>
+      <NxtWatchContext.Provider
+        value={{isDarkMode, toggleTheme: this.toggleTheme}}
+      >
         <Switch>
           <Route exact path="/login" component={LoginForm} />
           <ProtectedRoute exact path="/" component={Home} />
-          <ProtectedRoute exact path="/trending" component={Trending} />
+          {/* <ProtectedRoute exact path="/trending" component={Trending} />
           <ProtectedRoute exact path="/gaming" component={Gaming} />
-          <ProtectedRoute exact path="/saved-videos" component={SavedVideos} />
-          <ProtectedRoute
+          <ProtectedRoute exact path="/saved-videos" component={SavedVideos} /> */}
+          {/* <ProtectedRoute
             exact
             path="/videos/:id"
             component={VideoItemDetails}
-          />
+          /> */}
           <Route path="/not-found" component={NotFound} />
           <Redirect to="not-found" />
         </Switch>
