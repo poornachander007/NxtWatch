@@ -40,7 +40,7 @@ export const OptionContainer = styled.li`
 export const Label = styled.label`
   color: ${props => (props.isDarkMode ? 'white' : 'black')};
   font-size: 15px;
-  //   font-weight: bold;
+  font-weight: ${props => (props.isActive ? '900' : 'normal')};
   font-family: 'Roboto';
   margin-left: 20px;
 `
@@ -57,7 +57,7 @@ export const ContactsContainer = styled.div`
   font-family: 'Roboto';
 `
 
-export const ContactsHeading = styled.h1`
+export const ContactsHeading = styled.p`
   color: ${props => (props.isDarkMode ? 'white' : 'black')};
   font-size: 16px;
   font-weight: 700;

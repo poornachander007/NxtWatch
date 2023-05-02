@@ -151,6 +151,7 @@ class LoginForm extends Component {
                 onSubmit={this.submitForm}
               >
                 <WebsiteLogo
+                  alt='"website logo"'
                   src={
                     isDarkMode
                       ? websiteLogoForDarkMode

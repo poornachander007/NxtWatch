@@ -1,11 +1,17 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {MdClose} from 'react-icons/md'
+import {HiSearch} from 'react-icons/hi'
 import Loader from 'react-loader-spinner'
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css'
 import {PageContainer, SideBarAndContentContainer} from '../styledComponents'
 
 import NxtWatchContext from '../../context/NxtWatchContext'
+
+import Header from '../Header/index'
+import SideBar from '../SideBar/index'
+
+import HomeVideoItem from '../HomeVideoItem'
 
 import {
   ContentContainer,
@@ -15,14 +21,28 @@ import {
   CloseButton,
   BannerDescription,
   GetItNowButton,
+  InputContainer,
+  Input,
+  SearchButton,
+  VideosContainer,
+  FailureContainer,
+  Heading,
+  NoResultsFoundContainer,
+  ImgLogo,
+  Para,
+  RetryButton,
+  CustomContainer,
 } from './styledComponents'
-
-import Header from '../Header/index'
-import SideBar from '../SideBar/index'
 
 const websiteLogoForDarkMode =
   'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
 
+const lightHomeFailureUrl =
+  'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+const darkHomeFailureUrl =
+  'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
+const noResultsUrl =
+  'https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png'
 const apiStatusViews = {
   initial: 'INITIAL',
   in_progress: 'IN_PROGRESS',
@@ -31,11 +51,50 @@ const apiStatusViews = {
 }
 
 class Home extends Component {
-  state = {showBanner: true, videosList: [], apiStatus: apiStatusViews.initial}
+  state = {
+    showBanner: true,
+    searchInput: '',
+    videosList: [],
+    apiStatus: apiStatusViews.initial,
+  }
 
   componentDidMount = () => {
     this.getHomeVideos()
   }
+
+  renderFailureView = isDarkMode => (
+    <FailureContainer>
+      <ImgLogo
+        src={isDarkMode ? darkHomeFailureUrl : lightHomeFailureUrl}
+        alt="failure view"
+        failure
+      />
+      <Heading>Oops! Something Went Wrong</Heading>
+      <Para failurePara>
+        We are having some trouble complete your request.
+        <br />
+        Please try again.
+      </Para>
+      <CustomContainer retry>
+        <RetryButton onClick={this.onClickRetry}>Retry</RetryButton>
+      </CustomContainer>
+    </FailureContainer>
+  )
+
+  onClickRetry = () => {
+    this.getHomeVideos()
+  }
+
+  renderNoResultsFound = isDarkMode => (
+    <NoResultsFoundContainer>
+      <ImgLogo src={noResultsUrl} failure alt="no videos" />
+      <Heading>No Search results found</Heading>
+      <Para failurePara>Try different key words or remove search filter</Para>
+      <CustomContainer retry>
+        <RetryButton onClick={this.onClickRetry}>Retry</RetryButton>
+      </CustomContainer>
+    </NoResultsFoundContainer>
+  )
 
   getHomeVideos = async () => {
     this.setState({apiStatus: apiStatusViews.in_progress})
@@ -70,25 +129,71 @@ class Home extends Component {
     }
   }
 
-  renderLoadingView = () => (
-    <div className="products-loader-container">
+  renderLoadingView = isDarkMode => (
+    <div data-testid="loader" className="products-loader-container">
       <Loader type="ThreeDots" color="#0b69ff" height="50" width="50" />
     </div>
   )
 
-  renderFailureView = () => {}
+  onChangeSearchInput = event => {
+    this.setState({searchInput: event.target.value})
+  }
 
-  renderVideos = () => {}
+  onClickSearch = () => {
+    this.getHomeVideos()
+  }
 
-  renderComponentBasedOnApiStatus = () => {
+  renderInput = isDarkMode => {
+    const {searchInput} = this.state
+    return (
+      <InputContainer>
+        <Input
+          type="search"
+          placeholder="Search"
+          value={searchInput}
+          onChange={this.onChangeSearchInput}
+        />
+        <SearchButton
+          data-testid="searchButton"
+          type="button"
+          onClick={this.onClickSearch}
+          isDarkMode={isDarkMode}
+        >
+          <HiSearch size={16} color={isDarkMode ? 'white' : 'black'} />
+        </SearchButton>
+      </InputContainer>
+    )
+  }
+
+  renderVideos = isDarkMode => {
+    const {videosList, searchInput} = this.state
+    const filteredList = videosList.filter(eachItem =>
+      eachItem.title.toLowerCase().includes(searchInput.toLowerCase()),
+    )
+    return (
+      <>
+        {filteredList.length === 0
+          ? this.renderNoResultsFound(isDarkMode)
+          : filteredList.map(eachItem => (
+              <HomeVideoItem
+                theme={isDarkMode}
+                key={eachItem.id}
+                videoDetails={eachItem}
+              />
+            ))}
+      </>
+    )
+  }
+
+  renderComponentBasedOnApiStatus = isDarkMode => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusViews.in_progress:
-        return this.renderLoadingView()
+        return this.renderLoadingView(isDarkMode)
       case apiStatusViews.success:
-        return this.renderVideos()
+        return this.renderVideos(isDarkMode)
       case apiStatusViews.failure:
-        return this.renderFailureView()
+        return this.renderFailureView(isDarkMode)
       default:
         return null
     }
@@ -112,10 +217,14 @@ class Home extends Component {
                 <SideBar />
                 <ContentContainer isDarkMode={isDarkMode}>
                   {showBanner && (
-                    <Banner>
+                    <Banner data-testid="banner">
                       <WebsiteImageAndCloseButtonContainer>
-                        <WebsiteImage src={websiteLogoForDarkMode} />
+                        <WebsiteImage
+                          alt="nxt watch logo"
+                          src={websiteLogoForDarkMode}
+                        />
                         <CloseButton
+                          data-testid="close"
                           onClick={this.onClickCloseBanner}
                           type="button"
                         >
@@ -128,6 +237,10 @@ class Home extends Component {
                       <GetItNowButton>GET IT NOW</GetItNowButton>
                     </Banner>
                   )}
+                  {this.renderInput(isDarkMode)}
+                  <VideosContainer>
+                    {this.renderComponentBasedOnApiStatus(isDarkMode)}
+                  </VideosContainer>
                 </ContentContainer>
               </SideBarAndContentContainer>
             </PageContainer>
