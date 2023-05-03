@@ -81,10 +81,6 @@ class Home extends Component {
     </FailureContainer>
   )
 
-  onClickRetry = () => {
-    this.getHomeVideos()
-  }
-
   renderNoResultsFound = isDarkMode => (
     <NoResultsFoundContainer>
       <ImgLogo src={noResultsUrl} failure alt="no videos" />
@@ -127,6 +123,10 @@ class Home extends Component {
     } else {
       this.setState({apiStatus: apiStatusViews.failure})
     }
+  }
+
+  onClickRetry = () => {
+    this.getHomeVideos()
   }
 
   renderLoadingView = isDarkMode => (
@@ -215,7 +215,7 @@ class Home extends Component {
               <Header />
               <SideBarAndContentContainer isDarkMode={isDarkMode}>
                 <SideBar />
-                <ContentContainer isDarkMode={isDarkMode}>
+                <ContentContainer data-testid="home" isDarkMode={isDarkMode}>
                   {showBanner && (
                     <Banner data-testid="banner">
                       <WebsiteImageAndCloseButtonContainer>

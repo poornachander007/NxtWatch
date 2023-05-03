@@ -22,7 +22,7 @@ export const WebsiteLogo = styled.img`
   //   }
 `
 
-export const OptionsContainer = styled.div`
+export const OptionsContainer = styled.ul`
   display: flex;
   align-items: center;
 `

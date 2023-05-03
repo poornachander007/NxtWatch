@@ -1,14 +1,29 @@
 // import './index.css'
 import NxtWatchContext from '../../context/NxtWatchContext'
 
+import {CustomContainer, Image, Heading, Para} from './styledComponents'
+
 const NotFound = () => (
-  <div className="not-found-container">
-    <img
-      src="https://assets.ccbp.in/frontend/react-js/not-found-blog-img.png"
-      alt="not found"
-      className="not-found-img"
-    />
-  </div>
+  <NxtWatchContext.Consumer>
+    {value => {
+      const {isDarkMode} = value
+      return (
+        <CustomContainer
+          isDarkMode={isDarkMode}
+          className="not-found-container"
+        >
+          <Image
+            src="https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-light-theme-img.png"
+            alt="not found"
+          />
+          <Heading isDarkMode={isDarkMode}>Page Not Found</Heading>
+          <Para isDarkMode={isDarkMode}>
+            we are sorry, the page you requested could not be found.
+          </Para>
+        </CustomContainer>
+      )
+    }}
+  </NxtWatchContext.Consumer>
 )
 
 export default NotFound

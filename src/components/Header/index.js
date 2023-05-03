@@ -45,7 +45,7 @@ const Header = props => (
         Cookies.remove('jwt_token')
 
         const {history} = props
-        history.push('/login')
+        history.replace('/login')
       }
 
       const renderLogoutPopup = isDark => (
@@ -97,19 +97,23 @@ const Header = props => (
             />
           </Link>
           <OptionsContainer>
-            <PlaneButton
-              data-testid="theme"
-              onClick={onClickTheme}
-              type="button"
-            >
-              {isDarkMode ? (
-                <FiSun style={{color: 'white'}} size={25} />
-              ) : (
-                <HiMoon style={{color: '#212121'}} size={30} />
-              )}
-            </PlaneButton>
-            <ProfileLogo alt="profile" src={profileIcon} />
-            {renderLogoutPopup(isDarkMode)}
+            <li key={1}>
+              <PlaneButton
+                data-testid="theme"
+                onClick={onClickTheme}
+                type="button"
+              >
+                {isDarkMode ? (
+                  <FiSun style={{color: 'white'}} size={25} />
+                ) : (
+                  <HiMoon style={{color: '#212121'}} size={30} />
+                )}
+              </PlaneButton>
+            </li>
+            <li key={2}>
+              <ProfileLogo alt="profile" src={profileIcon} />
+            </li>
+            <li key={3}>{renderLogoutPopup(isDarkMode)}</li>
           </OptionsContainer>
         </HeaderContainer>
       )

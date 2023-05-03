@@ -52,6 +52,7 @@ class SideBar extends Component {
               <SideBarOptionsContainer>
                 <Link style={{textDecoration: 'none'}} to="/">
                   <OptionContainer
+                    key={1}
                     onClick={this.onClickSideBarOption}
                     id="Home"
                     isDarkMode={isDarkMode}
@@ -80,6 +81,7 @@ class SideBar extends Component {
                 </Link>
                 <Link style={{textDecoration: 'none'}} to="/trending">
                   <OptionContainer
+                    key={2}
                     onClick={this.onClickSideBarOption}
                     id="Trending"
                     isDarkMode={isDarkMode}
@@ -107,6 +109,7 @@ class SideBar extends Component {
                 </Link>
                 <Link style={{textDecoration: 'none'}} to="/gaming">
                   <OptionContainer
+                    key={3}
                     onClick={this.onClickSideBarOption}
                     id="Gaming"
                     isDarkMode={isDarkMode}
@@ -134,6 +137,7 @@ class SideBar extends Component {
                 </Link>
                 <Link style={{textDecoration: 'none'}} to="/saved-videos">
                   <OptionContainer
+                    key={4}
                     onClick={this.onClickSideBarOption}
                     id="Saved Videos"
                     isDarkMode={isDarkMode}

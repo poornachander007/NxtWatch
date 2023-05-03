@@ -4,6 +4,7 @@ export const ContentContainer = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
+  background-color: ${props => (props.isDark ? '#181818' : '#ffffff')};
 `
 
 export const Banner = styled.div`
